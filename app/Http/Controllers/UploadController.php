@@ -86,4 +86,45 @@ class UploadController extends Controller
     }
 }
 
-}
+    // Acara 20: ke 1 Tambahkan function dropzone dan dropzone_store
+    public function dropzone()
+    {
+        return view('dropzone');
+    }
+
+    public function dropzone_store(Request $request)
+    {
+        $image = $request->file('file');
+        $imageName = time() . '-' . $image->getClientOriginalName();
+        $image->move(public_path('img/dropzone'), $imageName);
+
+        return response()->json(['success' => $imageName]);
+    }
+
+     // Menampilkan halaman upload
+     public function pdf_upload()
+     {
+         return view('pdf_upload');
+     }
+ 
+     // Menyimpan file yang diunggah
+     public function pdf_store(Request $request)
+     {
+         // Validasi file harus PDF dan maksimal 2MB
+         $request->validate([
+             'file' => 'required|mimes:pdf|max:2048',
+         ]);
+ 
+         // Ambil file dari request
+         $pdf = $request->file('file');
+ 
+         // Buat nama unik berdasarkan timestamp
+         $pdfName = time() . '.' . $pdf->getClientOriginalExtension();
+ 
+         // Simpan ke folder public/pdf/dropzone
+         $pdf->move(public_path('pdf/dropzone'), $pdfName);
+ 
+         // Berikan respons JSON ke Dropzone
+         return response()->json(['success' => $pdfName]);
+     }
+ }
