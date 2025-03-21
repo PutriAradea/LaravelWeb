@@ -20,3 +20,4 @@ class AfterMiddleware
         return $response;
     }
 }
+
